@@ -10,18 +10,22 @@ public class EnemyWizardScript : MonoBehaviour
     public Transform spell;
 
     private GameObject player;
+    private EnemySightScript enemySightScript;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
+        enemySightScript = GetComponent<EnemySightScript>();
         StartCoroutine(shootPlayer());
     }
 
     IEnumerator shootPlayer(){
         while (true){
             yield return new WaitForSeconds(fireRate);
-            Fire();
+            if (enemySightScript.getSightState() && player.GetComponent<PlayerController>().getAliveState()){
+                Fire();
+            }
         }
     }
 

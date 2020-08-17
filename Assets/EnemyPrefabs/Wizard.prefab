@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3384977682848439444}
   - component: {fileID: 3384977682848439445}
   - component: {fileID: 3871059197030061874}
+  - component: {fileID: 1888221008016729400}
+  - component: {fileID: 4715944970981851138}
   m_Layer: 8
   m_Name: Wizard
   m_TagString: Untagged
@@ -74,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 6934264986797911814, guid: a2bc6bba19d41ae4ab3e92e65270e794,
+  m_Sprite: {fileID: -8190826543698210688, guid: e17d5fbc71c3e7945b128bbfedd3e792,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -149,6 +151,30 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &1888221008016729400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3384977682848439446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a31809de801ca04dad87d0ca8544c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4715944970981851138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3384977682848439446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bbc44fb736b722498ed66849fe2ffc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3384977683537801218
 GameObject:
   m_ObjectHideFlags: 0

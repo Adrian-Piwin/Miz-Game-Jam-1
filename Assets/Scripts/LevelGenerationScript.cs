@@ -26,7 +26,7 @@ public class LevelGenerationScript : MonoBehaviour
 
     void Update(){
         if (startPosition.position.x >= behindLevelEndPosition.x && !isGameOver){
-            Destroy(behindLevelTransform.gameObject);
+            if (behindLevelTransform != null) Destroy(behindLevelTransform.gameObject);
             spawnLevel();
         }
     }
@@ -40,20 +40,20 @@ public class LevelGenerationScript : MonoBehaviour
                 if (levelIndex >= levelsEasy.Length){
                     difficulty = 1;
                     levelIndex = 0;
-                    chosenLevel = levelsMedium[levelIndex];
+                    goto case 1;
                 }else{
                     chosenLevel = levelsEasy[levelIndex];
+                    break;
                 }
-                break;
             case 1: 
                 if (levelIndex >= levelsMedium.Length){
                     difficulty = 2;
                     levelIndex = 0;
-                    chosenLevel = levelsHard[levelIndex];
+                    goto case 2;
                 }else{
                     chosenLevel = levelsMedium[levelIndex];
+                    break;
                 }
-                break;
             case 2: 
                 if (levelIndex >= levelsHard.Length){
                     gameWon();
@@ -61,6 +61,7 @@ public class LevelGenerationScript : MonoBehaviour
                     chosenLevel = levelsHard[levelIndex];
                 }
                 break;
+                
             default:
                 break;
         }

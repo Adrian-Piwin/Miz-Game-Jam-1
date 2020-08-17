@@ -38,6 +38,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\CooldownScript.cs" />
+     <Compile Include="Assets\Scripts\EnemyFlipScript.cs" />
      <Compile Include="Assets\Scripts\EnemySightScript.cs" />
      <Compile Include="Assets\Scripts\EnemyWizardScript.cs" />
      <Compile Include="Assets\Scripts\LevelGenerationScript.cs" />
