@@ -4,24 +4,31 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Settings")]
     public float speed = 10.0f;
     public float swordCooldown = 1f;
     public float swordSwingTime = 0.3f;
+
+    [Header("References")]
+    public Rigidbody2D body;
     public GameObject sword;
     public GameObject coolDownBar;
+    public CameraMovement cameraScript;
+    public LevelGenerationScript levelGenerationScript;
 
     private Animator animator;
-    private bool gameStarted = false;
-    private Rigidbody2D body;
+    private bool isGamePlaying = false;
     private float horizontal;
     private float vertical;
     private bool canSwingSword = true;
+    private bool isAlive;
 
     // Start is called before the first frame update
     void Start()
     {
-        body = GetComponent<Rigidbody2D>();
+        //body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        isAlive = true;
     }
 
     // Update is called once per frame
@@ -31,12 +38,12 @@ public class PlayerController : MonoBehaviour
         vertical = Input.GetAxisRaw("Vertical");
 
         // Start game on movement
-        if ((horizontal != 0 || vertical != 0) && !gameStarted){
-            gameStarted = true;
+        if ((horizontal != 0 || vertical != 0) && !isGamePlaying && isAlive){
             StartGame();
         }
-
-        if (Input.GetMouseButtonDown(0) && canSwingSword){
+        
+        // Sword swing
+        if (Input.GetMouseButtonDown(0) && canSwingSword && isGamePlaying){
             canSwingSword = false;
             coolDownBar.GetComponent<CooldownScript>().enableCooldown(swordCooldown);
             sword.GetComponent<SwordScript>().updateSwingState(true);
@@ -45,9 +52,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate() {
-        Vector2 movement = new Vector2(horizontal, vertical);
-        movement = movement.normalized * Time.deltaTime * speed;
-        body.velocity = movement;
+        if (isGamePlaying){
+            Vector2 movement = new Vector2(horizontal, vertical);
+            movement = movement.normalized * Time.deltaTime * speed;
+            body.velocity = movement;
+        }  
     }
 
     IEnumerator swingSword(){
@@ -59,11 +68,21 @@ public class PlayerController : MonoBehaviour
     }
 
     private void StartGame(){
+        isGamePlaying = true;
         animator.SetBool("isMoving", true);
+        cameraScript.enableCamera(true);
+        levelGenerationScript.startGeneration();
     }
 
     private void GameOver(){
         Debug.Log("ded");
+        isGamePlaying = false;
+        isAlive = false;
+        animator.SetBool("isMoving", false);
+        body.bodyType = RigidbodyType2D.Static;
+        animator.Play("deathanim");
+        cameraScript.enableCamera(false);
+        levelGenerationScript.stopGeneration();
     }
 
     void OnCollisionEnter2D (Collision2D other){
@@ -78,6 +97,14 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+    }
+
+    public bool getAliveState(){
+        return isAlive;
+    }
+
+    public bool getGameState(){
+        return isGamePlaying;
     }
 
 }
