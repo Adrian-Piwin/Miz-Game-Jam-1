@@ -42,6 +42,7 @@
      <Compile Include="Assets\Scripts\EnemySightScript.cs" />
      <Compile Include="Assets\Scripts\EnemyWizardScript.cs" />
      <Compile Include="Assets\Scripts\LevelGenerationScript.cs" />
+     <Compile Include="Assets\Scripts\MovePointScript.cs" />
      <Compile Include="Assets\Scripts\MoveTowardsScript.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\SwordScript.cs" />

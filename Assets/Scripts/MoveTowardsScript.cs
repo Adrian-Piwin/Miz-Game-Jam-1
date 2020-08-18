@@ -10,6 +10,7 @@ public class MoveTowardsScript : MonoBehaviour
     private PlayerController playerController;
     private Animator anim;
     private EnemySightScript enemySightScript;
+    private bool isFollowing = true;
     
 
     // Start is called before the first frame update
@@ -25,11 +26,20 @@ public class MoveTowardsScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {   
-        if (playerController.getAliveState() && enemySightScript.getSightState())
-            body.velocity = ((target.transform.position - transform.position) * speed);
+        if (playerController.getAliveState() && enemySightScript.getSightState() && isFollowing)
+            if (transform.position.x < target.transform.position.x){
+                body.velocity = ((target.transform.position - transform.position) * speed/2);
+                StartCoroutine(stopFollowing());
+            }else
+                body.velocity = ((target.transform.position - transform.position) * speed);
         else{
             body.velocity = Vector2.zero;
             anim.enabled = false;   
         }
+    }
+
+    IEnumerator stopFollowing(){
+        yield return new WaitForSeconds(2);
+        isFollowing = false;
     }
 }
