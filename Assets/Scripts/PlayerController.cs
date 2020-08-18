@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public CameraMovement cameraScript;
     public LevelGenerationScript levelGenerationScript;
     public Transform playerHeartUI;
+    public GameMenuScript menuScript;
 
     private Animator animator;
     private bool isGamePlaying = false;
@@ -105,6 +106,7 @@ public class PlayerController : MonoBehaviour
             animator.Play("deathanim");
             cameraScript.enableCamera(false);
             levelGenerationScript.stopGeneration();
+            menuScript.toggleMenu(true);
         }else{
             body.AddForce(transform.right * -1 * hitSomethingForce, ForceMode2D.Impulse);
             animator.Play("playerhit");

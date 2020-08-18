@@ -16,8 +16,8 @@ TagManager:
   - 
   - Enemy
   - Walls
-  - 
-  - 
+  - OutOfBounds
+  - Player
   - 
   - 
   - 
