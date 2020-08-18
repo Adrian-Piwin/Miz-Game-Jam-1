@@ -10,9 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 953978364360291942}
   - component: {fileID: 953978364360291996}
-  - component: {fileID: 953978364360291997}
-  - component: {fileID: 953978364360291737}
-  - component: {fileID: 953978364360291995}
   - component: {fileID: 953978364360291992}
   - component: {fileID: 953978364360291993}
   m_Layer: 8
@@ -76,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7282822119527481986, guid: f12f40395e8119940a35f5a1a2f5a9f5,
+  m_Sprite: {fileID: -8122748445501865412, guid: f12f40395e8119940a35f5a1a2f5a9f5,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,50 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &953978364360291997
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953978364360291943}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e94ecbed20def954889ee584d56ddb6f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &953978364360291737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953978364360291943}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 466e97cbe97c8e54ab3bc366d4840c1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
---- !u!114 &953978364360291995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953978364360291943}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a31809de801ca04dad87d0ca8544c79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &953978364360291992
 Rigidbody2D:
   serializedVersion: 4

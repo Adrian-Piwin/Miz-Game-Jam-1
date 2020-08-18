@@ -20,9 +20,11 @@ public class EnemyFlipScript : MonoBehaviour
     {
         if (enemySightScript.getSightState()){
             if (player.position.x < transform.position.x){
-                transform.localRotation = Quaternion.Euler(0, 180, 0); // facing left
+                transform.localRotation = Quaternion.Euler(0, 0, 0);
+                 // facing left
             }else{
-                transform.localRotation = Quaternion.Euler(0, 0, 0); // facing right
+                transform.localRotation = Quaternion.Euler(0, 180, 0);
+                 // facing right
             }
         }
     }

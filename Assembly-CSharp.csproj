@@ -36,17 +36,19 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BounceSpellDestroy.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\CooldownScript.cs" />
      <Compile Include="Assets\Scripts\EnemyFlipScript.cs" />
+     <Compile Include="Assets\Scripts\EnemyMageScript.cs" />
      <Compile Include="Assets\Scripts\EnemySightScript.cs" />
      <Compile Include="Assets\Scripts\EnemyWizardScript.cs" />
      <Compile Include="Assets\Scripts\LevelGenerationScript.cs" />
      <Compile Include="Assets\Scripts\MovePointScript.cs" />
      <Compile Include="Assets\Scripts\MoveTowardsScript.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\SpellDestroyScript.cs" />
      <Compile Include="Assets\Scripts\SwordScript.cs" />
-     <Compile Include="Assets\Scripts\WizardSpellScript.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
