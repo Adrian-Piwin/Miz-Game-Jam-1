@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump
-        if (Input.GetKeyDown("space")){
+        if (Input.GetKeyDown("space") && isGamePlaying){
             StartCoroutine(jump());
         }
     }
