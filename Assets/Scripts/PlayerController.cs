@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 10.0f;
     public float swordCooldown = 1f;
     public float swordSwingTime = 0.3f;
+    public float jumpTime = 0.5f;
 
     [Header("References")]
     public Rigidbody2D body;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private float horizontal;
     private float vertical;
     private bool canSwingSword = true;
+    private bool isJumping = false;
     private bool isAlive;
 
     // Start is called before the first frame update
@@ -49,6 +51,11 @@ public class PlayerController : MonoBehaviour
             sword.GetComponent<SwordScript>().updateSwingState(true);
             StartCoroutine(swingSword());
         }
+
+        // Jump
+        if (Input.GetKeyDown("space")){
+            StartCoroutine(jump());
+        }
     }
 
     void FixedUpdate() {
@@ -64,6 +71,15 @@ public class PlayerController : MonoBehaviour
         sword.GetComponent<SwordScript>().updateSwingState(false);
         if (swordCooldown > swordSwingTime)
             yield return new WaitForSeconds(swordCooldown - swordSwingTime);
+        canSwingSword = true;
+    }
+
+    IEnumerator jump(){
+        isJumping = true;
+        canSwingSword = false;
+        animator.Play("jumpanim");
+        yield return new WaitForSeconds(jumpTime);
+        isJumping = false;
         canSwingSword = true;
     }
 
@@ -97,6 +113,18 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+    }
+
+    void OnTriggerEnter2D (Collider2D other){
+        switch (other.gameObject.layer){
+            case 4: // Water
+                if (!isJumping){
+                    GameOver();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     public bool getAliveState(){
