@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public float swordCooldown = 1f;
     public float swordSwingTime = 0.3f;
     public float jumpTime = 0.5f;
+    public float hitSomethingForce = 100f;
+    public int playerHearts = 3;
 
     [Header("References")]
     public Rigidbody2D body;
@@ -16,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public GameObject coolDownBar;
     public CameraMovement cameraScript;
     public LevelGenerationScript levelGenerationScript;
+    public Transform playerHeartUI;
 
     private Animator animator;
     private bool isGamePlaying = false;
@@ -24,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool canSwingSword = true;
     private bool isJumping = false;
     private bool isAlive;
+    private bool isHit = false;
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +64,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate() {
-        if (isGamePlaying){
+        if (isGamePlaying && !isHit){
             Vector2 movement = new Vector2(horizontal, vertical);
             movement = movement.normalized * Time.deltaTime * speed;
             body.velocity = movement;
@@ -91,14 +96,32 @@ public class PlayerController : MonoBehaviour
     }
 
     private void GameOver(){
-        Debug.Log("ded");
-        isGamePlaying = false;
-        isAlive = false;
-        animator.SetBool("isMoving", false);
-        body.bodyType = RigidbodyType2D.Static;
-        animator.Play("deathanim");
-        cameraScript.enableCamera(false);
-        levelGenerationScript.stopGeneration();
+        takeDamage();
+        if (playerHearts == 0){
+            isGamePlaying = false;
+            isAlive = false;
+            animator.SetBool("isMoving", false);
+            body.bodyType = RigidbodyType2D.Static;
+            animator.Play("deathanim");
+            cameraScript.enableCamera(false);
+            levelGenerationScript.stopGeneration();
+        }else{
+            body.AddForce(transform.right * -1 * hitSomethingForce, ForceMode2D.Impulse);
+            animator.Play("playerhit");
+        }
+    }
+
+    private void takeDamage(){
+        isHit = true;
+        StartCoroutine(noLongerHit());
+        playerHearts --;
+        Texture newTexture = Resources.Load<Texture>("heartempty");
+        playerHeartUI.GetChild(playerHearts).gameObject.GetComponent<RawImage>().texture = newTexture;
+    }
+
+    IEnumerator noLongerHit(){
+        yield return new WaitForSeconds(0.3f);
+        isHit = false;
     }
 
     void OnCollisionEnter2D (Collision2D other){

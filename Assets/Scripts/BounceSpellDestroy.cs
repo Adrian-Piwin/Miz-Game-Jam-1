@@ -10,7 +10,7 @@ public class BounceSpellDestroy : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (other.gameObject.layer == 9 && bounceMax == 0)
+        if ((other.gameObject.layer == 9 || other.gameObject.layer == 0) && bounceMax == 0)
             Destroy(gameObject);
         else bounceMax --;
     }
