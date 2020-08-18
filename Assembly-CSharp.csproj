@@ -40,6 +40,7 @@
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\CooldownScript.cs" />
      <Compile Include="Assets\Scripts\EnemyFlipScript.cs" />
+     <Compile Include="Assets\Scripts\EnemyHeadScript.cs" />
      <Compile Include="Assets\Scripts\EnemyMageScript.cs" />
      <Compile Include="Assets\Scripts\EnemySightScript.cs" />
      <Compile Include="Assets\Scripts\EnemyWizardScript.cs" />
