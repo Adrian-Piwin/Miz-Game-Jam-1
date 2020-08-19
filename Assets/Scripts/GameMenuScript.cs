@@ -15,6 +15,10 @@ public class GameMenuScript : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
+    public void loadWinScreen(){
+        SceneManager.LoadScene("GameWon", LoadSceneMode.Single);
+    }
+
     public void toggleMenu(bool toggle){
         gameOverMenu.SetActive(toggle);
     }

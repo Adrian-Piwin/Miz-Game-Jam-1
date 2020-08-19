@@ -26,12 +26,14 @@ public class MoveTowardsScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {   
-        if (playerController.getAliveState() && enemySightScript.getSightState() && isFollowing)
+        if (playerController.getAliveState() && enemySightScript.getSightState() && isFollowing){
+            anim.enabled = true;   
             if (transform.position.x < target.transform.position.x){
                 body.velocity = ((target.transform.position - transform.position) * speed/2);
                 StartCoroutine(stopFollowing());
             }else
                 body.velocity = ((target.transform.position - transform.position) * speed);
+        }
         else{
             body.velocity = Vector2.zero;
             anim.enabled = false;   

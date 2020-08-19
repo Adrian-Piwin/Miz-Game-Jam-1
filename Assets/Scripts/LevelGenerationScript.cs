@@ -5,9 +5,10 @@ using UnityEngine;
 public class LevelGenerationScript : MonoBehaviour
 {
     public Transform levelOne;
-    public Transform[] levelsEasy;
-    public Transform[] levelsMedium;
-    public Transform[] levelsHard;
+    public Transform levelLast;
+    public List<Transform> levelsEasy;
+    public List<Transform> levelsMedium;
+    public List<Transform> levelsHard;
     public Transform startPosition;
 
     private Vector3 lastEndPosition;
@@ -15,12 +16,16 @@ public class LevelGenerationScript : MonoBehaviour
     private Transform behindLevelTransform;
     private Vector3 behindLevelEndPosition;
     private int difficulty = 0; // 0 easy, 1 medium, 2 hard
-    private int levelIndex = 0;
     private bool isGameOver = false;
+    private bool isGameWon = false;
+    private PlayerController playerController;
+    private CameraMovement cameraMovement;
 
     // Start is called before the first frame update
     void Awake()
     { 
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        cameraMovement = GameObject.Find("Main Camera").GetComponent<CameraMovement>();
         spawnFirstLevel();
     }
 
@@ -29,49 +34,61 @@ public class LevelGenerationScript : MonoBehaviour
             if (behindLevelTransform != null) Destroy(behindLevelTransform.gameObject);
             spawnLevel();
         }
+
+        if (isGameWon){
+            if (startPosition.position.x > lastEndPosition.x){
+                cameraMovement.enableCamera(false);
+                playerController.GameWon();
+                isGameWon = false;
+            }
+        }
     }
 
     private void spawnLevel(){
         // Choose levels from list
         Transform chosenLevel = levelOne;
+        int ranNum;
 
         switch (difficulty){
             case 0: 
-                if (levelIndex >= levelsEasy.Length){
+                if (levelsEasy.Count == 0){
                     difficulty = 1;
-                    levelIndex = 0;
                     goto case 1;
                 }else{
-                    chosenLevel = levelsEasy[levelIndex];
+                    ranNum = Random.Range(0, levelsEasy.Count);
+                    chosenLevel = levelsEasy[ranNum];
+                    levelsEasy.RemoveAt(ranNum);
                     break;
                 }
             case 1: 
-                if (levelIndex >= levelsMedium.Length){
+                if (levelsMedium.Count == 0){
                     difficulty = 2;
-                    levelIndex = 0;
                     goto case 2;
                 }else{
-                    chosenLevel = levelsMedium[levelIndex];
+                    ranNum = Random.Range(0, levelsMedium.Count);
+                    chosenLevel = levelsMedium[ranNum];
+                    levelsMedium.RemoveAt(ranNum);
                     break;
                 }
             case 2: 
-                if (levelIndex >= levelsHard.Length){
+                if (levelsHard.Count == 0){
                     gameWon();
                 }else{
-                    chosenLevel = levelsHard[levelIndex];
+                    ranNum = Random.Range(0, levelsHard.Count);
+                    chosenLevel = levelsHard[ranNum];
+                    levelsHard.RemoveAt(ranNum);
                 }
                 break;
                 
             default:
                 break;
         }
-
-        levelIndex += 1;
-
-        behindLevelTransform = lastLevelTransform;
-        behindLevelEndPosition = lastEndPosition;
-        lastLevelTransform = spawnLevel(lastEndPosition, chosenLevel);
-        lastEndPosition = lastLevelTransform.Find("EndPosition").position;
+        if (!isGameOver){
+            behindLevelTransform = lastLevelTransform;
+            behindLevelEndPosition = lastEndPosition;
+            lastLevelTransform = spawnLevel(lastEndPosition, chosenLevel);
+            lastEndPosition = lastLevelTransform.Find("EndPosition").position;
+        }
     }
 
     private void spawnFirstLevel(){
@@ -95,7 +112,9 @@ public class LevelGenerationScript : MonoBehaviour
 
     private void gameWon(){
         isGameOver = true;
-        Debug.Log("winner");
+        isGameWon = true;
+        Transform levelTransform = Instantiate(levelLast, lastEndPosition + new Vector3(12,0,0), Quaternion.identity);
+        levelTransform.parent = GameObject.Find("Grid").transform;
     }
 
 }

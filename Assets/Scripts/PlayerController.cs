@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public GameMenuScript menuScript;
 
     private Animator animator;
+    private GameObject cameraEnd;
     private bool isGamePlaying = false;
     private float horizontal;
     private float vertical;
@@ -30,20 +31,25 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isAlive;
     private bool isHit = false;
+    private bool isGameWon = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        cameraEnd = GameObject.Find("CameraEnd");
         isAlive = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        if (!isGameWon){
+            horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
+        }else{
+            if (transform.position.x > cameraEnd.transform.position.x){
+                GameObject.Find("GameMenuScript").GetComponent<GameMenuScript>().loadWinScreen();
+            }
+        }
 
         // Start game on movement
         if ((horizontal != 0 || vertical != 0) && !isGamePlaying && isAlive){
@@ -72,6 +78,7 @@ public class PlayerController : MonoBehaviour
         }  
     }
 
+    // Player swinging sword
     IEnumerator swingSword(){
         yield return new WaitForSeconds(swordSwingTime);
         sword.GetComponent<SwordScript>().updateSwingState(false);
@@ -80,6 +87,7 @@ public class PlayerController : MonoBehaviour
         canSwingSword = true;
     }
 
+    // Player jump
     IEnumerator jump(){
         isJumping = true;
         canSwingSword = false;
@@ -89,6 +97,7 @@ public class PlayerController : MonoBehaviour
         canSwingSword = true;
     }
 
+    // Start game
     private void StartGame(){
         isGamePlaying = true;
         animator.SetBool("isMoving", true);
@@ -96,8 +105,10 @@ public class PlayerController : MonoBehaviour
         levelGenerationScript.startGeneration();
     }
 
+    // Take damage, end game if no health left
     private void GameOver(){
-        takeDamage();
+        if (!isHit)
+            takeDamage();
         if (playerHearts == 0){
             isGamePlaying = false;
             isAlive = false;
@@ -113,19 +124,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void takeDamage(){
-        isHit = true;
-        StartCoroutine(noLongerHit());
-        playerHearts --;
-        Texture newTexture = Resources.Load<Texture>("heartempty");
-        playerHeartUI.GetChild(playerHearts).gameObject.GetComponent<RawImage>().texture = newTexture;
+    // Player finished all levels
+    // Let player go off screen
+    public void GameWon(){
+        isGameWon = true;
+        horizontal = 1;
+        vertical = 0;
+        GameObject.Find("OutOfBounds").SetActive(false);
+
     }
 
+    // Remove heart from UI
+    private void takeDamage(){
+        if (isAlive){
+            isHit = true;
+            StartCoroutine(noLongerHit());
+            playerHearts --;
+            Texture newTexture = Resources.Load<Texture>("heartempty");
+            playerHeartUI.GetChild(playerHearts).gameObject.GetComponent<RawImage>().texture = newTexture;
+        }
+    }
+
+    // Hit grace period
     IEnumerator noLongerHit(){
         yield return new WaitForSeconds(0.3f);
         isHit = false;
     }
 
+    // Collision with enemies
     void OnCollisionEnter2D (Collision2D other){
         switch (other.gameObject.layer){
             case 8: // Enemy   
@@ -140,6 +166,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // Collision for jumpables
     void OnTriggerEnter2D (Collider2D other){
         switch (other.gameObject.layer){
             case 4: // Water
@@ -152,10 +179,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Get Alive state
     public bool getAliveState(){
         return isAlive;
     }
 
+    // Get game state
     public bool getGameState(){
         return isGamePlaying;
     }

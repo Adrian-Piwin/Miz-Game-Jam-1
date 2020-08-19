@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BounceSpellDestroy : MonoBehaviour
 {
-    private int bounceMax = 3;
+    private int bounceMax = 2;
     void OnCollisionEnter2D (Collision2D other){
         if (other.gameObject.tag == "Player"){
             Destroy(gameObject);

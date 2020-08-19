@@ -12,6 +12,7 @@ public class EnemyHeadScript : MonoBehaviour
     private EnemySightScript enemySightScript;
     private Animation anim;
     private Rigidbody2D body;
+    private bool isFollowing = true;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,7 @@ public class EnemyHeadScript : MonoBehaviour
     }
 
     IEnumerator targetPlayer(){
-        while (true){
+        while (isFollowing){
             if (enemySightScript.getSightState() && player.GetComponent<PlayerController>().getAliveState()){
                 anim.enabled = true;
                 yield return new WaitForSeconds(chargeTime);
@@ -42,7 +43,7 @@ public class EnemyHeadScript : MonoBehaviour
         direction.Normalize();
 
         if (transform.position.x < player.transform.position.x)
-            speed = speed / 2;
+            StartCoroutine(stopFollowing());
         body.velocity = direction * speed;
         StartCoroutine(stopMoving());
     }
@@ -50,5 +51,10 @@ public class EnemyHeadScript : MonoBehaviour
     IEnumerator stopMoving(){
         yield return new WaitForSeconds(distanceTime);
         body.velocity = Vector2.zero;
+    }
+
+    IEnumerator stopFollowing(){
+        yield return new WaitForSeconds(2f);
+        isFollowing = false;
     }
 }
