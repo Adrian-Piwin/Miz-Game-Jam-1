@@ -7,27 +7,29 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Settings")]
     public float speed = 10.0f;
-    public float swordCooldown = 1f;
-    public float swordSwingTime = 0.3f;
+    public float driftCooldown = 1f;
+    public float driftTime = 0.3f;
     public float jumpTime = 0.5f;
     public float hitSomethingForce = 100f;
     public int playerHearts = 3;
 
     [Header("References")]
     public Rigidbody2D body;
-    public GameObject sword;
     public GameObject coolDownBar;
     public CameraMovement cameraScript;
     public LevelGenerationScript levelGenerationScript;
     public Transform playerHeartUI;
     public GameMenuScript menuScript;
+    public GameObject destroyParticle;
+    public ParticleSystem driftSparks;
 
     private Animator animator;
     private GameObject cameraEnd;
     private bool isGamePlaying = false;
     private float horizontal;
     private float vertical;
-    private bool canSwingSword = true;
+    private bool canDrift = true;
+    private bool isDrifting = false;
     private bool isJumping = false;
     private bool isAlive;
     private bool isHit = false;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         cameraEnd = GameObject.Find("CameraEnd");
         isAlive = true;
+        driftSparks.Stop();
     }
 
     void Update()
@@ -56,45 +59,71 @@ public class PlayerController : MonoBehaviour
             StartGame();
         }
         
-        // Sword swing
-        if (Input.GetMouseButtonDown(0) && canSwingSword && isGamePlaying){
-            canSwingSword = false;
-            coolDownBar.GetComponent<CooldownScript>().enableCooldown(swordCooldown);
-            sword.GetComponent<SwordScript>().updateSwingState(true);
-            StartCoroutine(swingSword());
+        // Drift
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDrift && isGamePlaying && !isJumping){
+            canDrift = false;
+            isDrifting = true;
+            coolDownBar.GetComponent<CooldownScript>().enableCooldown(driftCooldown);
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isDrifting", true);
+            driftSparks.Play();
+            StartCoroutine(startDrift());
+        }
+        
+        // Stop drift if release shift
+        if (Input.GetKeyUp(KeyCode.LeftShift) && isDrifting){
+            stopDrifting();
         }
 
         // Jump
-        if (Input.GetKeyDown("space") && isGamePlaying){
+        if (Input.GetKeyDown("space") && isGamePlaying && !isDrifting){
             StartCoroutine(jump());
         }
     }
 
     void FixedUpdate() {
         if (isGamePlaying && !isHit){
-            Vector2 movement = new Vector2(horizontal, vertical);
-            movement = movement.normalized * Time.deltaTime * speed;
-            body.velocity = movement;
-        }  
+            if (!isDrifting){
+                float spd;
+                if (horizontal == -1)
+                    spd = speed * 1.8f;
+                else spd = speed;
+
+                Vector2 movement = new Vector2(horizontal, vertical);
+                movement = movement.normalized * Time.deltaTime * spd;
+                body.velocity = movement;
+            }else{
+                Vector2 movement = new Vector2(1, 0);
+                movement = movement.normalized * Time.deltaTime * (speed * 1.5f);
+                body.velocity = movement;
+            }
+        }
     }
 
     // Player swinging sword
-    IEnumerator swingSword(){
-        yield return new WaitForSeconds(swordSwingTime);
-        sword.GetComponent<SwordScript>().updateSwingState(false);
-        if (swordCooldown > swordSwingTime)
-            yield return new WaitForSeconds(swordCooldown - swordSwingTime);
-        canSwingSword = true;
+    IEnumerator startDrift(){
+        yield return new WaitForSeconds(driftTime);
+        stopDrifting();
+        if (driftCooldown > driftTime)
+            yield return new WaitForSeconds(driftCooldown - driftTime);
+        canDrift = true;
+    }
+
+    private void stopDrifting(){
+        isDrifting = false;
+        animator.SetBool("isDrifting", false);
+        animator.SetBool("isMoving", true);
+        driftSparks.Stop();
     }
 
     // Player jump
     IEnumerator jump(){
         isJumping = true;
-        canSwingSword = false;
+        canDrift = false;
         animator.Play("jumpanim");
         yield return new WaitForSeconds(jumpTime);
         isJumping = false;
-        canSwingSword = true;
+        canDrift = true;
     }
 
     // Start game
@@ -106,9 +135,11 @@ public class PlayerController : MonoBehaviour
     }
 
     // Take damage, end game if no health left
-    private void GameOver(){
-        if (!isHit)
-            takeDamage();
+    private void GameOver(bool isDestroyable){
+        if ((!isHit && !isDestroyable) || (!isHit && isDestroyable && !isDrifting))
+            takeDamage(isDestroyable);
+            
+
         if (playerHearts == 0){
             isGamePlaying = false;
             isAlive = false;
@@ -118,9 +149,24 @@ public class PlayerController : MonoBehaviour
             cameraScript.enableCamera(false);
             levelGenerationScript.stopGeneration();
             menuScript.toggleMenu(true);
-        }else{
-            body.AddForce(transform.right * -1 * hitSomethingForce, ForceMode2D.Impulse);
+        }
+    }
+
+    // Remove heart from UI
+    private void takeDamage(bool isDestroyable){
+        if (isAlive){
+            isHit = true;
+            cameraScript.enableCamera(false);
+            StartCoroutine(noLongerHit());
+            playerHearts --;
+            Texture newTexture = Resources.Load<Texture>("heartempty");
+            playerHeartUI.GetChild(playerHearts).gameObject.GetComponent<RawImage>().texture = newTexture;
+
+            stopDrifting();
+            if (!isDestroyable)
+                body.AddForce(transform.right * -1 * hitSomethingForce, ForceMode2D.Impulse);
             animator.Play("playerhit");
+            
         }
     }
 
@@ -134,31 +180,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    // Remove heart from UI
-    private void takeDamage(){
-        if (isAlive){
-            isHit = true;
-            StartCoroutine(noLongerHit());
-            playerHearts --;
-            Texture newTexture = Resources.Load<Texture>("heartempty");
-            playerHeartUI.GetChild(playerHearts).gameObject.GetComponent<RawImage>().texture = newTexture;
-        }
-    }
-
     // Hit grace period
     IEnumerator noLongerHit(){
         yield return new WaitForSeconds(0.3f);
         isHit = false;
+        if (isGamePlaying)
+            cameraScript.enableCamera(true);
     }
 
     // Collision with enemies
     void OnCollisionEnter2D (Collision2D other){
         switch (other.gameObject.layer){
             case 8: // Enemy   
-                GameOver();
+                GameOver(true);
+                if (other.gameObject.tag != "Projectile"){
+                    Destroy(other.gameObject);
+                    Instantiate(destroyParticle, other.transform.position, Quaternion.identity);
+                }
                 break;
             case 9: // Walls
-                GameOver();
+                GameOver(false);
                 break;
             default:
                 break;
@@ -171,7 +212,7 @@ public class PlayerController : MonoBehaviour
         switch (other.gameObject.layer){
             case 4: // Water
                 if (!isJumping){
-                    GameOver();
+                    GameOver(false);
                 }
                 break;
             default:

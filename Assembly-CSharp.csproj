@@ -36,6 +36,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\FullTiltBoogie\RotateFlareHolder.cs" />
      <Compile Include="Assets\Scripts\BounceSpellDestroy.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\CooldownScript.cs" />
@@ -53,6 +54,7 @@
      <Compile Include="Assets\Scripts\SpellDestroyScript.cs" />
      <Compile Include="Assets\Scripts\SwordScript.cs" />
      <Compile Include="Assets\Scripts\WinnerMenuScript.cs" />
+     <None Include="Assets\FullTiltBoogie\Helpers\readme.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

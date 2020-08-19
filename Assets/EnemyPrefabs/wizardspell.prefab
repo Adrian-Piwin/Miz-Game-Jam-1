@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6162883720849404318}
   m_Layer: 8
   m_Name: wizardspell
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,6 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5822974628395a47ac07bc4deb52152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyParticle: {fileID: 1506902717015244, guid: 24437e98d083c904b82d438a8ec5ce94,
+    type: 3}
 --- !u!1 &6993260589462094108
 GameObject:
   m_ObjectHideFlags: 0

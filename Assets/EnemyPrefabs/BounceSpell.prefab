@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5705433172708486681}
   m_Layer: 8
   m_Name: BounceSpell
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,6 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40f33d3eb541904598358207d650965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyParticle: {fileID: 1506902717015244, guid: 24437e98d083c904b82d438a8ec5ce94,
+    type: 3}
 --- !u!1 &6002963065304792303
 GameObject:
   m_ObjectHideFlags: 0
