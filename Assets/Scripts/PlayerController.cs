@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
 
         // Jump
         if (Input.GetKeyDown("space") && isGamePlaying && !isDrifting){
+            SoundManagerScript.PlaySound("jump");
             StartCoroutine(jump());
         }
     }
@@ -154,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
     // End game
     private void gameOver(){
+        SoundManagerScript.PlaySound("playerdeath");
         isGamePlaying = false;
         isAlive = false;
         animator.SetBool("isMoving", false);
@@ -204,12 +206,16 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D (Collision2D other){
         switch (other.gameObject.layer){
             case 8: // Enemy   
+                if (other.gameObject.tag != "Projectile")
+                    SoundManagerScript.PlaySound("enemyhit");
                 playerHit(true);
                 break;
             case 9: // Walls
+                SoundManagerScript.PlaySound("enemyhit");
                 playerHit(false);
                 break;
             case 12: // Boss
+                SoundManagerScript.PlaySound("enemyhit");
                 playerHit(false);
                 break;
             default:
@@ -229,6 +235,18 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    // Restore health
+    public void healthPickup(){
+        SoundManagerScript.PlaySound("heartpickup");
+        if (playerHearts < 3){
+            Texture newTexture = Resources.Load<Texture>("heartfull");
+            playerHearts = 3;
+
+            for (int i = 0; i < playerHearts; i++)
+                playerHeartUI.GetChild(i).gameObject.GetComponent<RawImage>().texture = newTexture;
+            }
     }
 
     // Get drift state

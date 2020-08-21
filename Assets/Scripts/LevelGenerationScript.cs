@@ -124,6 +124,7 @@ public class LevelGenerationScript : MonoBehaviour
     }
 
     IEnumerator spawnBoss(){
+        GameObject.Find("Music Manager").GetComponent<MusicManagerScript>().SwitchBossMusic();
         yield return new WaitForSeconds(5f);
         // Instantiate boss
         Instantiate(bossObj, GameObject.Find("Main Camera").gameObject.transform);

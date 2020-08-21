@@ -39,7 +39,7 @@ public class SkullBossScript : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         maxHealth = health;
         bodyTransform = transform.parent.transform;
         animator = GetComponent<Animator>();
@@ -107,10 +107,12 @@ public class SkullBossScript : MonoBehaviour
 
     // Take damage
     public void takeDamage(){
+        SoundManagerScript.PlaySound("bosshit");
         animator.Play("skulldamage");
         health--;
 
         if (health == maxHealth/2){ // Change phase
+            SoundManagerScript.PlaySound("bossphase");
             phaseTwo = true;
 
             moveSpeed = moveSpeedPhaseTwo;
@@ -125,6 +127,7 @@ public class SkullBossScript : MonoBehaviour
         }
 
         if (health == 0){ // Die
+            SoundManagerScript.PlaySound("bossphase");
             StopCoroutine(shootTimer);
             animator.SetBool("isDying", true);
             StartCoroutine(destroyBoss());

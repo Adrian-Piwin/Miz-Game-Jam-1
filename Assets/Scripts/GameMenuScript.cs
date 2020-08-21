@@ -21,5 +21,7 @@ public class GameMenuScript : MonoBehaviour
 
     public void toggleMenu(bool toggle){
         gameOverMenu.SetActive(toggle);
+        
+        LeanTween.scale(gameOverMenu, new Vector3(1.5f,1.5f,1f), 0.5f);
     }
 }

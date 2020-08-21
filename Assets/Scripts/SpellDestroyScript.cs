@@ -30,13 +30,15 @@ public class SpellDestroyScript : MonoBehaviour
             
             case 11: // Player
                 if (!playerController.getDriftState()){ // Destroy and hit player
+                    SoundManagerScript.PlaySound("enemyhit");
                     destroySpell();
                     playerController.playerHit(true);
 
                 }else if(!isReflectable){ // Destroy without hitting player
                     destroySpell();
 
-                }else{ // After reflecting, allowibg damage to enemies
+                }else{ // After reflecting, allowing damage to enemies
+                    SoundManagerScript.PlaySound("reflection");
                     canKillEnemy = true;
                     if (isBossSpell) toggleCollision(GameObject.Find("SkullBoss"), false);
                 }

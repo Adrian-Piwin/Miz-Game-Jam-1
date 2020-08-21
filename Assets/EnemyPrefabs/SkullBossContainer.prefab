@@ -83,6 +83,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -182,7 +183,7 @@ MonoBehaviour:
   stopTimeMax: 0.8
   fireRate: 2
   fireSpeed: 7
-  moveSpeedPhaseTwo: 7
+  moveSpeedPhaseTwo: 6
   stopTimeMinPhaseTwo: 0.5
   stopTimeMaxPhaseTwo: 1
   fireRatePhaseTwo: 1

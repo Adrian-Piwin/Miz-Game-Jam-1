@@ -28,11 +28,12 @@ public class MoveTowardsScript : MonoBehaviour
     {   
         if (playerController.getAliveState() && enemySightScript.getSightState() && isFollowing){
             anim.enabled = true;   
+
             if (transform.position.x < target.transform.position.x){
-                body.velocity = ((target.transform.position - transform.position) * speed/2);
                 StartCoroutine(stopFollowing());
-            }else
-                body.velocity = ((target.transform.position - transform.position) * speed);
+            }
+
+            body.velocity = ((target.transform.position - transform.position) * speed);
         }
         else{
             body.velocity = Vector2.zero;
@@ -41,7 +42,7 @@ public class MoveTowardsScript : MonoBehaviour
     }
 
     IEnumerator stopFollowing(){
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3.5f);
         isFollowing = false;
     }
 }
