@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5633644762065689435}
   - component: {fileID: 8142079561780107834}
   - component: {fileID: 3965643813113119708}
+  - component: {fileID: 511156498087953930}
   - component: {fileID: 138447888593150910}
-  - component: {fileID: 6162883720849404318}
   m_Layer: 8
   m_Name: wizardspell
   m_TagString: Projectile
@@ -31,7 +31,7 @@ Transform:
   m_LocalPosition: {x: 1.74, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
-  - {fileID: 5889288386701998002}
+  - {fileID: 651212286049747541}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -106,6 +106,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &511156498087953930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981089012649871793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5822974628395a47ac07bc4deb52152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyParticle: {fileID: 1506902717015244, guid: 24437e98d083c904b82d438a8ec5ce94,
+    type: 3}
+  bounceMax: 0
+  isBossSpell: 0
 --- !u!61 &138447888593150910
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,21 +148,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7486813, y: 0.7648959}
   m_EdgeRadius: 0
---- !u!114 &6162883720849404318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981089012649871793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5822974628395a47ac07bc4deb52152, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destroyParticle: {fileID: 1506902717015244, guid: 24437e98d083c904b82d438a8ec5ce94,
-    type: 3}
---- !u!1 &6993260589462094108
+--- !u!1 &5776012545437456773
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,36 +156,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5889288386701998002}
-  - component: {fileID: 3772727645238703163}
-  m_Layer: 9
-  m_Name: Point Light 2D
+  - component: {fileID: 651212286049747541}
+  - component: {fileID: 2542122031801874584}
+  m_Layer: 8
+  m_Name: 'Point Light 2D '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5889288386701998002
+--- !u!4 &651212286049747541
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993260589462094108}
-  m_LocalRotation: {x: -0, y: -0, z: 0.0071302373, w: 0.9999746}
+  m_GameObject: {fileID: 5776012545437456773}
+  m_LocalRotation: {x: -0, y: -0, z: 0.002116984, w: 0.9999978}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 5633644762065689435}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3772727645238703163
+--- !u!114 &2542122031801874584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993260589462094108}
+  m_GameObject: {fileID: 5776012545437456773}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
@@ -193,7 +195,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0, g: 0.5247073, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 0.2
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -205,7 +207,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1.6
+  m_PointLightOuterRadius: 2.4856787
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5

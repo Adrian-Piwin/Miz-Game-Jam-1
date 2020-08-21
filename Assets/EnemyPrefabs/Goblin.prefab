@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3379791318855659409}
   - component: {fileID: 3379791318855659410}
   - component: {fileID: 3379791318855659411}
+  - component: {fileID: 6864486153892557488}
   m_Layer: 8
   m_Name: Goblin
   m_TagString: Untagged
@@ -179,6 +180,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.74956083, y: 0.8728237}
   m_EdgeRadius: 0
+--- !u!114 &6864486153892557488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3379791318855659373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3d6daf77ff8424392b02360f5ad0ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyParticle: {fileID: 1506902717015244, guid: b43ae27ab283e0e4ebf695c7b6b729f0,
+    type: 3}
 --- !u!1 &5423331633939418406
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +241,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 0.3
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}

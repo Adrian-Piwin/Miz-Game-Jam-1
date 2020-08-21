@@ -10,7 +10,9 @@ public class LevelGenerationScript : MonoBehaviour
     public List<Transform> levelsMedium;
     public List<Transform> levelsHard;
     public Transform startPosition;
+    public GameObject bossObj;
 
+    private bool isBossFight = false;
     private Vector3 lastEndPosition;
     private Transform lastLevelTransform;
     private Transform behindLevelTransform;
@@ -49,40 +51,44 @@ public class LevelGenerationScript : MonoBehaviour
         Transform chosenLevel = levelOne;
         int ranNum;
 
-        switch (difficulty){
-            case 0: 
-                if (levelsEasy.Count == 0){
-                    difficulty = 1;
-                    goto case 1;
-                }else{
-                    ranNum = Random.Range(0, levelsEasy.Count);
-                    chosenLevel = levelsEasy[ranNum];
-                    levelsEasy.RemoveAt(ranNum);
+        if (!isBossFight){
+            switch (difficulty){
+                case 0: 
+                    if (levelsEasy.Count == 0){
+                        difficulty = 1;
+                        goto case 1;
+                    }else{
+                        ranNum = Random.Range(0, levelsEasy.Count);
+                        chosenLevel = levelsEasy[ranNum];
+                        levelsEasy.RemoveAt(ranNum);
+                        break;
+                    }
+                case 1: 
+                    if (levelsMedium.Count == 0){
+                        difficulty = 2;
+                        goto case 2;
+                    }else{
+                        ranNum = Random.Range(0, levelsMedium.Count);
+                        chosenLevel = levelsMedium[ranNum];
+                        levelsMedium.RemoveAt(ranNum);
+                        break;
+                    }
+                case 2: 
+                    if (levelsHard.Count == 0){
+                        isBossFight = true;
+                        StartCoroutine(spawnBoss());
+                    }else{
+                        ranNum = Random.Range(0, levelsHard.Count);
+                        chosenLevel = levelsHard[ranNum];
+                        levelsHard.RemoveAt(ranNum);
+                    }
                     break;
-                }
-            case 1: 
-                if (levelsMedium.Count == 0){
-                    difficulty = 2;
-                    goto case 2;
-                }else{
-                    ranNum = Random.Range(0, levelsMedium.Count);
-                    chosenLevel = levelsMedium[ranNum];
-                    levelsMedium.RemoveAt(ranNum);
+                    
+                default:
                     break;
-                }
-            case 2: 
-                if (levelsHard.Count == 0){
-                    gameWon();
-                }else{
-                    ranNum = Random.Range(0, levelsHard.Count);
-                    chosenLevel = levelsHard[ranNum];
-                    levelsHard.RemoveAt(ranNum);
-                }
-                break;
-                
-            default:
-                break;
+            }
         }
+
         if (!isGameOver){
             behindLevelTransform = lastLevelTransform;
             behindLevelEndPosition = lastEndPosition;
@@ -115,6 +121,16 @@ public class LevelGenerationScript : MonoBehaviour
         isGameWon = true;
         Transform levelTransform = Instantiate(levelLast, lastEndPosition + new Vector3(12,0,0), Quaternion.identity);
         levelTransform.parent = GameObject.Find("Grid").transform;
+    }
+
+    IEnumerator spawnBoss(){
+        yield return new WaitForSeconds(5f);
+        // Instantiate boss
+        Instantiate(bossObj, GameObject.Find("Main Camera").gameObject.transform);
+    }
+
+    public void bossDefeated(){
+        gameWon();
     }
 
 }

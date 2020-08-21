@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public LevelGenerationScript levelGenerationScript;
     public Transform playerHeartUI;
     public GameMenuScript menuScript;
-    public GameObject destroyParticle;
     public ParticleSystem driftSparks;
 
     private Animator animator;
@@ -34,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool isAlive;
     private bool isHit = false;
     private bool isGameWon = false;
+    private IEnumerator driftIEnumerator;
 
     void Start()
     {
@@ -63,16 +63,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDrift && isGamePlaying && !isJumping){
             canDrift = false;
             isDrifting = true;
-            coolDownBar.GetComponent<CooldownScript>().enableCooldown(driftCooldown);
             animator.SetBool("isMoving", false);
             animator.SetBool("isDrifting", true);
             driftSparks.Play();
-            StartCoroutine(startDrift());
+            driftIEnumerator = startDrift();
+            StartCoroutine(driftIEnumerator);
         }
         
         // Stop drift if release shift
         if (Input.GetKeyUp(KeyCode.LeftShift) && isDrifting){
+            StartCoroutine(canDriftAgain());
             stopDrifting();
+            StopCoroutine(driftIEnumerator);
         }
 
         // Jump
@@ -100,12 +102,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Player swinging sword
+    // Player drifting
     IEnumerator startDrift(){
         yield return new WaitForSeconds(driftTime);
         stopDrifting();
-        if (driftCooldown > driftTime)
-            yield return new WaitForSeconds(driftCooldown - driftTime);
+        StartCoroutine(canDriftAgain());
+    }
+
+    // Can drift again cool down
+    IEnumerator canDriftAgain(){
+        coolDownBar.GetComponent<CooldownScript>().enableCooldown(driftCooldown);
+        yield return new WaitForSeconds(driftCooldown);
         canDrift = true;
     }
 
@@ -135,21 +142,26 @@ public class PlayerController : MonoBehaviour
     }
 
     // Take damage, end game if no health left
-    private void GameOver(bool isDestroyable){
+    public void playerHit(bool isDestroyable){
         if ((!isHit && !isDestroyable) || (!isHit && isDestroyable && !isDrifting))
             takeDamage(isDestroyable);
             
 
         if (playerHearts == 0){
-            isGamePlaying = false;
-            isAlive = false;
-            animator.SetBool("isMoving", false);
-            body.bodyType = RigidbodyType2D.Static;
-            animator.Play("deathanim");
-            cameraScript.enableCamera(false);
-            levelGenerationScript.stopGeneration();
-            menuScript.toggleMenu(true);
+            gameOver();
         }
+    }
+
+    // End game
+    private void gameOver(){
+        isGamePlaying = false;
+        isAlive = false;
+        animator.SetBool("isMoving", false);
+        body.bodyType = RigidbodyType2D.Static;
+        animator.Play("deathanim");
+        cameraScript.enableCamera(false);
+        levelGenerationScript.stopGeneration();
+        menuScript.toggleMenu(true);
     }
 
     // Remove heart from UI
@@ -192,14 +204,13 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D (Collision2D other){
         switch (other.gameObject.layer){
             case 8: // Enemy   
-                GameOver(true);
-                if (other.gameObject.tag != "Projectile"){
-                    Destroy(other.gameObject);
-                    Instantiate(destroyParticle, other.transform.position, Quaternion.identity);
-                }
+                playerHit(true);
                 break;
             case 9: // Walls
-                GameOver(false);
+                playerHit(false);
+                break;
+            case 12: // Boss
+                playerHit(false);
                 break;
             default:
                 break;
@@ -212,12 +223,17 @@ public class PlayerController : MonoBehaviour
         switch (other.gameObject.layer){
             case 4: // Water
                 if (!isJumping){
-                    GameOver(false);
+                    playerHit(false);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    // Get drift state
+    public bool getDriftState(){
+        return isDrifting;
     }
 
     // Get Alive state
