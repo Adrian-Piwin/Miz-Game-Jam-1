@@ -7,6 +7,7 @@ public class EnemyHeadScript : MonoBehaviour
     public float chargeTime = 1f;
     public float distanceTime = 1f;
     public float speed = 2f;
+    public float followTime = 1f;
 
     private GameObject player;
     private EnemySightScript enemySightScript;
@@ -54,7 +55,7 @@ public class EnemyHeadScript : MonoBehaviour
     }
 
     IEnumerator stopFollowing(){
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(followTime);
         isFollowing = false;
     }
 }

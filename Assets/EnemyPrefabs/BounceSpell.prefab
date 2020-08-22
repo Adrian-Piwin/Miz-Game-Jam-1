@@ -52,6 +52,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -122,9 +123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyParticle: {fileID: 1506902717015244, guid: 24437e98d083c904b82d438a8ec5ce94,
     type: 3}
-  bounceMax: 1
+  bounceMax: 2
   isReflectable: 1
-  isBossSpell: 0
 --- !u!61 &3800713495417574005
 BoxCollider2D:
   m_ObjectHideFlags: 0

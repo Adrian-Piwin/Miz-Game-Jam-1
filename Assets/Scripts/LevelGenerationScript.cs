@@ -6,6 +6,7 @@ public class LevelGenerationScript : MonoBehaviour
 {
     public Transform levelOne;
     public Transform levelLast;
+    public Transform levelHeal;
     public List<Transform> levelsEasy;
     public List<Transform> levelsMedium;
     public List<Transform> levelsHard;
@@ -56,7 +57,7 @@ public class LevelGenerationScript : MonoBehaviour
                 case 0: 
                     if (levelsEasy.Count == 0){
                         difficulty = 1;
-                        goto case 1;
+                        goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsEasy.Count);
                         chosenLevel = levelsEasy[ranNum];
@@ -66,7 +67,7 @@ public class LevelGenerationScript : MonoBehaviour
                 case 1: 
                     if (levelsMedium.Count == 0){
                         difficulty = 2;
-                        goto case 2;
+                        goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsMedium.Count);
                         chosenLevel = levelsMedium[ranNum];
@@ -77,13 +78,16 @@ public class LevelGenerationScript : MonoBehaviour
                     if (levelsHard.Count == 0){
                         isBossFight = true;
                         StartCoroutine(spawnBoss());
+                        goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsHard.Count);
                         chosenLevel = levelsHard[ranNum];
                         levelsHard.RemoveAt(ranNum);
                     }
                     break;
-                    
+                case 3:
+                    chosenLevel = levelHeal;
+                    break;
                 default:
                     break;
             }
@@ -125,12 +129,13 @@ public class LevelGenerationScript : MonoBehaviour
 
     IEnumerator spawnBoss(){
         GameObject.Find("Music Manager").GetComponent<MusicManagerScript>().SwitchBossMusic();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(10f);
         // Instantiate boss
         Instantiate(bossObj, GameObject.Find("Main Camera").gameObject.transform);
     }
 
     public void bossDefeated(){
+        GameObject.Find("Music Manager").GetComponent<MusicManagerScript>().endBossMusic();
         gameWon();
     }
 

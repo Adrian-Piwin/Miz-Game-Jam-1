@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         // Jump
         if (Input.GetKeyDown("space") && isGamePlaying && !isDrifting){
-            SoundManagerScript.PlaySound("jump");
+            //SoundManagerScript.PlaySound("jump");
             StartCoroutine(jump());
         }
     }

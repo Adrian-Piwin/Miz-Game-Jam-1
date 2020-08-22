@@ -5,27 +5,26 @@ using UnityEngine;
 public class MusicManagerScript : MonoBehaviour
 {
 
-    private static AudioClip[] musicClips = new AudioClip[2];
-    private static AudioSource audioSrc;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        musicClips[0] = Resources.Load<AudioClip> ("Sounds/music1");
-        musicClips[1] = Resources.Load<AudioClip> ("Sounds/music1"); // boss song
-
-        audioSrc = GetComponent<AudioSource>();
-    }
+    public AudioSource audioSrc;
+    public AudioSource audioSrcBoss;
 
     public void SwitchBossMusic(){
-        StartCoroutine(StartFade(audioSrc, 3f, 0f, 0f));
-        audioSrc.clip = musicClips[1];
-        StartCoroutine(StartFade(audioSrc, 1f, 1f, 3f));
+        StartCoroutine(StartFade(audioSrc, 4f, 0f, 0f, false));
+        audioSrcBoss.time = 7f;
+        StartCoroutine(StartFade(audioSrcBoss, 3f, PlayerPrefs.GetFloat("MusicVolume", 0.5f), 4f, true));
     }
 
-    private IEnumerator StartFade(AudioSource audioSource, float duration, float targetVolume, float delay)
+    public void endBossMusic(){
+        StartCoroutine(StartFade(audioSrcBoss, 10f, 0f, 0f, false));
+    }
+
+    private IEnumerator StartFade(AudioSource audioSource, float duration, float targetVolume, float delay, bool toggle)
     {
         yield return new WaitForSeconds(delay);
+
+        if (toggle)
+            audioSource.Play();
+
         float currentTime = 0;
         float start = audioSource.volume;
 
@@ -35,7 +34,12 @@ public class MusicManagerScript : MonoBehaviour
             audioSource.volume = Mathf.Lerp(start, targetVolume, currentTime / duration);
             yield return null;
         }
+
+        if (!toggle)
+            audioSource.Stop();
+
         yield break;
+        
     }
 }
 
