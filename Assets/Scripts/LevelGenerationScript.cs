@@ -5,8 +5,10 @@ using UnityEngine;
 public class LevelGenerationScript : MonoBehaviour
 {
     public Transform levelOne;
+    public Transform levelTutorialOne;
     public Transform levelLast;
     public Transform levelHeal;
+    public List<Transform> levelsTutorial;
     public List<Transform> levelsEasy;
     public List<Transform> levelsMedium;
     public List<Transform> levelsHard;
@@ -29,7 +31,12 @@ public class LevelGenerationScript : MonoBehaviour
     { 
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         cameraMovement = GameObject.Find("Main Camera").GetComponent<CameraMovement>();
-        spawnFirstLevel();
+        if (PlayerPrefs.GetInt("tutorial", 1) == 1){
+            spawnFirstTutorialLevel();
+            difficulty = -1;
+        }else{
+            spawnFirstLevel();
+        }
     }
 
     void Update(){
@@ -54,6 +61,16 @@ public class LevelGenerationScript : MonoBehaviour
 
         if (!isBossFight){
             switch (difficulty){
+                case -1:
+                    if (levelsTutorial.Count == 0){
+                        PlayerPrefs.SetInt("tutorial", 0);
+                        difficulty = 0;
+                        goto case 3;
+                    }else{
+                        chosenLevel = levelsTutorial[0];
+                        levelsTutorial.RemoveAt(0);
+                    }
+                    break;
                 case 0: 
                     if (levelsEasy.Count == 0){
                         difficulty = 1;
@@ -103,6 +120,11 @@ public class LevelGenerationScript : MonoBehaviour
 
     private void spawnFirstLevel(){
         lastLevelTransform = spawnLevel(new Vector3(-12,0,0), levelOne);
+        lastEndPosition = lastLevelTransform.Find("EndPosition").position;
+    }
+
+    private void spawnFirstTutorialLevel(){
+        lastLevelTransform = spawnLevel(new Vector3(-12,0,0), levelTutorialOne);
         lastEndPosition = lastLevelTransform.Find("EndPosition").position;
     }
 
