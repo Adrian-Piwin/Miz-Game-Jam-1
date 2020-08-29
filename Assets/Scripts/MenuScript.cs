@@ -9,6 +9,9 @@ public class MenuScript : MonoBehaviour
     public Toggle tutorialToggle;
 
     void Start(){
+        PlayerPrefs.SetInt("DifficultySave", 0);
+        PlayerPrefs.SetInt("BossSave", 0);
+
         if (PlayerPrefs.GetInt("tutorial", 1) == 1)
             tutorialToggle.isOn = true;
         else tutorialToggle.isOn = false;

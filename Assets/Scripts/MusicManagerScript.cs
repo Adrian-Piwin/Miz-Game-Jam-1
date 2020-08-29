@@ -11,11 +11,11 @@ public class MusicManagerScript : MonoBehaviour
     public void SwitchBossMusic(){
         StartCoroutine(StartFade(audioSrc, 4f, 0f, 0f, false));
         audioSrcBoss.time = 7f;
-        StartCoroutine(StartFade(audioSrcBoss, 3f, PlayerPrefs.GetFloat("MusicVolume", 0.5f), 4f, true));
+        StartCoroutine(StartFade(audioSrcBoss, 3f, 1f, 4f, true));
     }
 
     public void endBossMusic(){
-        StartCoroutine(StartFade(audioSrcBoss, 10f, 0f, 0f, false));
+        StartCoroutine(StartFade(audioSrcBoss, 12f, 0f, 0f, false));
     }
 
     private IEnumerator StartFade(AudioSource audioSource, float duration, float targetVolume, float delay, bool toggle)

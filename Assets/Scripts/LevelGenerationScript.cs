@@ -7,7 +7,7 @@ public class LevelGenerationScript : MonoBehaviour
     public Transform levelOne;
     public Transform levelTutorialOne;
     public Transform levelLast;
-    public Transform levelHeal;
+    public List<Transform> levelsHeal;
     public List<Transform> levelsTutorial;
     public List<Transform> levelsEasy;
     public List<Transform> levelsMedium;
@@ -35,7 +35,15 @@ public class LevelGenerationScript : MonoBehaviour
             spawnFirstTutorialLevel();
             difficulty = -1;
         }else{
-            spawnFirstLevel();
+            difficulty = PlayerPrefs.GetInt("DifficultySave", 0);
+            if (difficulty != 0){
+                    if (PlayerPrefs.GetInt("BossSave", 0) == 1)
+                        spawnFirstLevel(levelsHeal[3]);
+                    else 
+                        spawnFirstLevel(levelsHeal[difficulty]);
+                }
+            else
+                spawnFirstLevel(levelOne);
         }
     }
 
@@ -74,6 +82,7 @@ public class LevelGenerationScript : MonoBehaviour
                 case 0: 
                     if (levelsEasy.Count == 0){
                         difficulty = 1;
+                        PlayerPrefs.SetInt("DifficultySave", difficulty);
                         goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsEasy.Count);
@@ -84,6 +93,7 @@ public class LevelGenerationScript : MonoBehaviour
                 case 1: 
                     if (levelsMedium.Count == 0){
                         difficulty = 2;
+                        PlayerPrefs.SetInt("DifficultySave", difficulty);
                         goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsMedium.Count);
@@ -92,10 +102,13 @@ public class LevelGenerationScript : MonoBehaviour
                         break;
                     }
                 case 2: 
-                    if (levelsHard.Count == 0){
+                    if (levelsHard.Count == 0 || PlayerPrefs.GetInt("BossSave", 0) == 1){
+                        int temp = PlayerPrefs.GetInt("BossSave", 0);
+                        PlayerPrefs.SetInt("BossSave", 1);
                         isBossFight = true;
                         StartCoroutine(spawnBoss());
-                        goto case 3;
+                        if (temp == 0)
+                            goto case 3;
                     }else{
                         ranNum = Random.Range(0, levelsHard.Count);
                         chosenLevel = levelsHard[ranNum];
@@ -103,7 +116,10 @@ public class LevelGenerationScript : MonoBehaviour
                     }
                     break;
                 case 3:
-                    chosenLevel = levelHeal;
+                    if (PlayerPrefs.GetInt("BossSave", 0) == 1)
+                        chosenLevel = levelsHeal[3];
+                    else
+                        chosenLevel = levelsHeal[difficulty];
                     break;
                 default:
                     break;
@@ -118,8 +134,8 @@ public class LevelGenerationScript : MonoBehaviour
         }
     }
 
-    private void spawnFirstLevel(){
-        lastLevelTransform = spawnLevel(new Vector3(-12,0,0), levelOne);
+    private void spawnFirstLevel(Transform lvl){
+        lastLevelTransform = spawnLevel(new Vector3(-12,0,0), lvl);
         lastEndPosition = lastLevelTransform.Find("EndPosition").position;
     }
 

@@ -229,6 +229,7 @@ public class PlayerController : MonoBehaviour
         switch (other.gameObject.layer){
             case 4: // Water
                 if (!isJumping){
+                    SoundManagerScript.PlaySound("enemyhit");
                     playerHit(false);
                 }
                 break;
