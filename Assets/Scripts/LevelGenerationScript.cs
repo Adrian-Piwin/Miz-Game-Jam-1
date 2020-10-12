@@ -177,4 +177,8 @@ public class LevelGenerationScript : MonoBehaviour
         gameWon();
     }
 
+    public int getLevelDifficulty(){
+        return difficulty;
+    }
+
 }

@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public float hitSomethingForce = 100f;
     public int playerHearts = 3;
 
+    public float invincibilityTime = 2f;
+
     [Header("References")]
     public Rigidbody2D body;
     public GameObject coolDownBar;
@@ -20,7 +22,9 @@ public class PlayerController : MonoBehaviour
     public LevelGenerationScript levelGenerationScript;
     public Transform playerHeartUI;
     public GameMenuScript menuScript;
+    public ProgressBar progressBar;
     public ParticleSystem driftSparks;
+    public List<SpriteRenderer> playerSprites;
 
     private Animator animator;
     private GameObject cameraEnd;
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private bool isDrifting = false;
     private bool isJumping = false;
     private bool isAlive;
+    private bool canBeHit = true;
     private bool isHit = false;
     private bool isGameWon = false;
     private IEnumerator driftIEnumerator;
@@ -164,11 +169,12 @@ public class PlayerController : MonoBehaviour
         cameraScript.enableCamera(false);
         levelGenerationScript.stopGeneration();
         menuScript.toggleMenu(true);
+        progressBar.showProgress(levelGenerationScript.getLevelDifficulty());
     }
 
     // Remove heart from UI
     private void takeDamage(bool isDestroyable){
-        if (isAlive){
+        if (isAlive && canBeHit){
             isHit = true;
             cameraScript.enableCamera(false);
             StartCoroutine(noLongerHit());
@@ -180,7 +186,9 @@ public class PlayerController : MonoBehaviour
             if (!isDestroyable)
                 body.AddForce(transform.right * -1 * hitSomethingForce, ForceMode2D.Impulse);
             animator.Play("playerhit");
-            
+
+            if (playerHearts > 0)
+                StartCoroutine(invincibilityPhase());
         }
     }
 
@@ -202,6 +210,32 @@ public class PlayerController : MonoBehaviour
             cameraScript.enableCamera(true);
     }
 
+    // Give player short invincibility after being hit
+    IEnumerator invincibilityPhase(){
+        canBeHit = false;
+        StartCoroutine(showInvincibility(invincibilityTime));
+        yield return new WaitForSeconds(invincibilityTime);
+        canBeHit = true;
+    }
+
+    // Blink player to show invincability
+    IEnumerator showInvincibility(float timer){
+        float diffTime = 0.15f;
+        float time = 0f;
+
+        while (time < timer){
+            yield return new WaitForSeconds(diffTime);
+            time += diffTime;
+                for (int i = 0; i < playerSprites.Count; i++){
+                    playerSprites[i].enabled = !playerSprites[i].enabled;
+                }
+        }
+
+        for (int i = 0; i < playerSprites.Count; i++){
+            playerSprites[i].enabled = true;
+        }
+    }
+
     // Collision with enemies
     void OnCollisionEnter2D (Collision2D other){
         switch (other.gameObject.layer){
@@ -209,10 +243,6 @@ public class PlayerController : MonoBehaviour
                 if (other.gameObject.tag != "Projectile")
                     SoundManagerScript.PlaySound("enemyhit");
                 playerHit(true);
-                break;
-            case 9: // Walls
-                SoundManagerScript.PlaySound("enemyhit");
-                playerHit(false);
                 break;
             case 12: // Boss
                 SoundManagerScript.PlaySound("enemyhit");
@@ -248,6 +278,11 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < playerHearts; i++)
                 playerHeartUI.GetChild(i).gameObject.GetComponent<RawImage>().texture = newTexture;
             }
+    }
+
+    // Get jump state
+    public bool getJumpState(){
+        return isJumping;
     }
 
     // Get drift state

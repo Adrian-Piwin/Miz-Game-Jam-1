@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7703007726880209601}
   - component: {fileID: 8960275266068458699}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 2402954601898822627}
   - component: {fileID: 8248236853330311827}
   - component: {fileID: 8248236853330311826}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Bigboy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,6 +124,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

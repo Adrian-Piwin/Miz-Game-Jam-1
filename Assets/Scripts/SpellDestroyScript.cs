@@ -29,6 +29,7 @@ public class SpellDestroyScript : MonoBehaviour
                 break;
             
             case 11: // Player
+
                 if (!playerController.getDriftState()){ // Destroy and hit player
                     SoundManagerScript.PlaySound("enemyhit");
                     destroySpell();
